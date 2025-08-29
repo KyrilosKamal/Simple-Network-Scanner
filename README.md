@@ -28,24 +28,24 @@ chmod +x scanner.sh
 ```
 
 ## Example
-Enter Network ID (e.g. 192.168.1): 192.168.1
-Enter the start range: 10
-Enter the end range: 20
+Enter Network ID (e.g. 192.168.1): 192.168.1 <bR>
+Enter the start range: 10 <bR>
+Enter the end range: 20 <bR>
 
 ## Output:
-✅ 192.168.1.10 is UP
+✅ 192.168.1.10 is UP <bR>
 ❌ 192.168.1.11 is DOWN
 ...
 
 ## 📊 Scan Report:
-Up Devices: 5
-Down Devices: 6
-Total Scanned: 11
+Up Devices: 5 <bR>
+Down Devices: 6  <bR>
+Total Scanned: 11 <bR>
 
 ## 🧠 Notes
-Works best on /24 subnets
-Requires ICMP (ping) to be allowed by target devices
-No external dependencies
+Works best on /24 subnets <bR>
+Requires ICMP (ping) to be allowed by target devices <bR>
+No external dependencies <bR>
 
 ## 👨‍💻 Author
 Kyrillos Kamal <br>
