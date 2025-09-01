@@ -1,39 +1,50 @@
 #!/bin/bash
+# سكربت لفحص الأجهزة الحية في شبكة محددة باستخدام ping
 
+# طلب إدخال معرف الشبكة من المستخدم (مثال: 192.168.1)
 read -p "Enter Network ID (e.g. 192.168.1): " networkID
+
+# طلب بداية ونهاية النطاق لفحص IPs
 read -p "Enter the start range: " start
 read -p "Enter the end range: " end
 
+# التحقق من أن معرف الشبكة يتبع تنسيق IP جزئي (ثلاث مجموعات رقمية مفصولة بنقاط)
 regex='^[0-9]+\.[0-9]+\.[0-9]+$'
 if ! [[ "$networkID" =~ $regex ]]; then
-  echo "Invalid network ID"
-  exit 1
+  echo "Invalid network ID"  # طباعة رسالة خطأ إذا لم يكن التنسيق صحيح
+  exit 1                    # إنهاء السكربت
 fi
 
+# التحقق من أن النطاق المدخل صحيح (من 1 إلى 254، والبداية أصغر من النهاية)
 if (( start < 1 || end > 254 || start > end )); then
-  echo "Invalid range"
-  exit 1
+  echo "Invalid range"      # طباعة رسالة خطأ إذا كان النطاق غير منطقي
+  exit 1                    # إنهاء السكربت
 fi
 
-echo -e "\n Scanning from $networkID.$start to $networkID.$end..."
+# طباعة بداية الفحص
+echo -e "\nScanning from $networkID.$start to $networkID.$end..."
 echo "===================================================================="
 
+# عدادات للأجهزة الحية والمطفأة
 liveDeviceCount=0
 downDeviceCount=0
 
+# حلقة لفحص كل IP في النطاق المحدد
 for i in $(seq "$start" "$end"); do
-  ip="$networkID.$i"
+  ip="$networkID.$i"  # تكوين عنوان IP كامل
+
+  # تنفيذ أمر ping مرة واحدة مع مهلة ثانية واحدة
   if ping -c 1 -W 1 "$ip" &> /dev/null; then
     echo "===================================================================="
-    echo "Host $ip UP"
-    ((liveDeviceCount++))
+    echo "Host $ip UP"       # الجهاز متصل
+    ((liveDeviceCount++))  # زيادة عداد الأجهزة الحية
   else
-    echo "Host $ip Down"
-    ((downDeviceCount++))
+    echo "Host $ip Down"     # الجهاز غير متصل
+    ((downDeviceCount++))   # زيادة عداد الأجهزة المطفأة
   fi
 done
 
-# Report
+# طباعة تقرير الفحص النهائي
 echo "===================================================================="
 echo "Scan Report:"
 echo "Up Devices:   $liveDeviceCount"
